@@ -43,7 +43,7 @@ def split_nodes_image(old_nodes):
         if node.text_type == TextType.NORMAL:
             text = extract_markdown_images(node.text)
             current_text = node.text
-            if not text:
+            if  text == None:
                 return old_nodes
             for item in text:
                 alt, url = item
@@ -55,7 +55,7 @@ def split_nodes_image(old_nodes):
             if current_text != "":
                 new_nodes.append(TextNode(current_text, TextType.NORMAL))
         else:
-            new_nodes.append(node)
+           new_nodes.append(node)
     return new_nodes
 
 def split_nodes_link(old_nodes):
@@ -64,7 +64,7 @@ def split_nodes_link(old_nodes):
         if node.text_type == TextType.NORMAL:
             text = extract_markdown_links(node.text)
             current_text = node.text
-            if not text:
+            if text == None:                               
                 return old_nodes
             for item in text:
                 txt, url = item
@@ -78,3 +78,18 @@ def split_nodes_link(old_nodes):
         else:
             new_nodes.append(node)
     return new_nodes
+
+def text_to_textnodes(text):
+    initial_node = [TextNode(text, TextType.NORMAL)]
+    first_string = split_nodes_delimiter(initial_node, "**", TextType.BOLD)
+    # print(f"first = {first_string}")
+    second_string = split_nodes_delimiter(first_string, "_", TextType.ITALIC)
+    # print(f"second = {second_string}")
+    third_string = split_nodes_delimiter(second_string, "`", TextType.CODE)
+    # print(f"third = {third_string}")
+    fourth_string = split_nodes_image(third_string)
+    # print(f"fourth = {fourth_string}")
+    fifth_string = split_nodes_link(fourth_string)
+   # print(f"fifth = {fifth_string}")
+    return fifth_string
+

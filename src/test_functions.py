@@ -121,5 +121,19 @@ class TestFunctions(unittest.TestCase):
                 ],
                 new_nodes,
             )
+
+    def test_text_to_textnodes(self):
+        text = "This is text with a ![image](https://i.imgur.com/zjjcJKZ.png)."
+        nodes = text_to_textnodes(text)
+        self.assertEqual(len(nodes), 3)
+        self.assertListEqual(
+            [
+                TextNode("This is text with a ", TextType.NORMAL),
+                TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(".", TextType.NORMAL),
+            ],
+            nodes,
+        )
+       
 if __name__ == "__main__":
     unittest.main()
