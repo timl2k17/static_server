@@ -43,7 +43,7 @@ def split_nodes_image(old_nodes):
         if node.text_type == TextType.NORMAL:
             text = extract_markdown_images(node.text)
             current_text = node.text
-            if  text == None:
+            if  text is None:
                 return old_nodes
             for item in text:
                 alt, url = item
@@ -64,7 +64,7 @@ def split_nodes_link(old_nodes):
         if node.text_type == TextType.NORMAL:
             text = extract_markdown_links(node.text)
             current_text = node.text
-            if text == None:                               
+            if text is None:                               
                 return old_nodes
             for item in text:
                 txt, url = item

@@ -1,7 +1,8 @@
 import unittest
 
-from textnode import TextNode, TextType
+from textnode import *
 from functions import *
+from block_functions import *
 
 class TestFunctions(unittest.TestCase):
     def test_text(self):
@@ -134,6 +135,50 @@ class TestFunctions(unittest.TestCase):
             ],
             nodes,
         )
-       
+    def test_markdown_to_blocks(self):
+        md = """
+This is **bolded** paragraph
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+- This is a list
+- with items
+"""
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
+            blocks,
+            [
+                "This is **bolded** paragraph",
+                "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
+                "- This is a list\n- with items",
+            ],
+        )
+
+    def test_block_to_block_type(self):
+        block = "# This is a heading"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.H)
+
+        block = "This is a paragraph"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.P)
+
+        block = "```python\nprint('Hello, World!')\n```"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.CODE)
+
+        block = "> This is a quote"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.QUOTE)
+
+        block = "- This is an unordered list item"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.UL)
+
+        block = "1. This is an ordered list item"
+        block_type = block_to_block_type(block)
+        self.assertEqual(block_type, BlockType.OL)
+
 if __name__ == "__main__":
     unittest.main()

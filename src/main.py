@@ -1,6 +1,7 @@
 from textnode import TextNode, TextType
 from htmlnode import LeafNode, ParentNode
 from functions import *
+from block_functions import *
 
 def main():
     test = TextNode("Test", TextType.NORMAL)
@@ -23,6 +24,26 @@ def main():
     # print("split_nodes_link below")
     # print(split_nodes_link([node]))
     text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
-    
-    
+    text_blob = """
+This is **bolded** paragraph
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+- This is a list
+- with items
+"""
+    # markdown_to_blocks(text_blob)
+    text_blob = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+This is another paragraph with _italic_ text and `code` here
+
+"""
+
+    markdown_to_html_node(text_blob)
+
+
 main()
