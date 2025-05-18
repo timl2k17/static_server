@@ -1,6 +1,6 @@
 from textnode import TextNode, TextType
 from htmlnode import LeafNode, ParentNode
-from functions import split_nodes_delimiter, extract_markdown_images, split_nodes_image
+from functions import *
 
 def main():
     test = TextNode("Test", TextType.NORMAL)
@@ -17,10 +17,11 @@ def main():
     text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
     extract_markdown_images(text)
     node = TextNode(
-        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+        "This is text with an [link](https://i.imgur.com/zjjcJKZ.png) and another [second link](https://i.imgur.com/3elNhQu.png)",
         TextType.NORMAL,
     )
-    print("split_nodes_image below")
-    split_nodes_image([node])
+    print("split_nodes_link below")
+    print(split_nodes_link([node]))
+    
     
 main()
