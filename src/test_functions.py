@@ -1,0 +1,54 @@
+import unittest
+
+from textnode import TextNode, TextType
+from functions import text_node_to_html_node, split_nodes_delimiter, extract_markdown_images, extract_markdown_links
+
+class TestFunctions(unittest.TestCase):
+    def test_text(self):
+        node = TextNode("This is a text node", TextType.NORMAL)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, None)
+        self.assertEqual(html_node.value, "This is a text node")
+    def test_image(self):
+        node = TextNode("This is a text node", TextType.IMAGE, "http://example.com/image.png")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "img")
+        self.assertEqual(html_node.value, None)
+        self.assertEqual(html_node.props, {"src": "http://example.com/image.png", "alt": "This is a text node"})
+    def test_link(self):
+        node = TextNode("This is a text node", TextType.LINK, "http://example.com")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "a")
+        self.assertEqual(html_node.value, "This is a text node")
+        self.assertEqual(html_node.props, {"href": "http://example.com"})
+    def test_snd(self):
+        node = TextNode("This is text with a `code block` word", TextType.NORMAL)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        expected = [
+        TextNode("This is text with a ", TextType.NORMAL),
+        TextNode("code block", TextType.CODE),
+        TextNode(" word", TextType.NORMAL),
+        ]
+        self.assertEqual(new_nodes, expected)
+    def test_snd2(self):
+        node = TextNode("This is text with a `code block`", TextType.NORMAL)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        expected = [
+        TextNode("This is text with a ", TextType.NORMAL),
+        TextNode("code block", TextType.CODE),
+        TextNode("", TextType.NORMAL),
+        ]
+        self.assertEqual(new_nodes, expected)
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images(
+        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+    )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links(
+        "This is text with an [link](https://www.example.com)"
+    )
+        self.assertListEqual([("link", "https://www.example.com")], matches)
+        
+if __name__ == "__main__":
+    unittest.main()

@@ -2,7 +2,6 @@ import unittest
 
 from htmlnode import HTMLNode, LeafNode, ParentNode
 
-
 class TestHTMLNode(unittest.TestCase):
     def test_prop(self):
         hnode = HTMLNode("div", "This is a div", None, {"class": "test"})
@@ -53,7 +52,5 @@ class TestHTMLNode(unittest.TestCase):
             parent_node.to_html(),
             '<div class="test"><span>child</span></div>',
         )
-
-    
 if __name__ == "__main__":
     unittest.main()
