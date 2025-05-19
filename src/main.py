@@ -43,7 +43,24 @@ This is another paragraph with _italic_ text and `code` here
 
 """
 
-    markdown_to_html_node(text_blob)
+    # print(markdown_to_html_node(text_blob).to_html())
+    text_blob = """
+```
+This is text that _should_ remain
+the **same** even with inline stuff
+```
+"""
+    #print(markdown_to_html_node(text_blob).to_html())
+    
+    text_blob = """
+- -
+-- this has a dash.
+"""
+    #print(markdown_to_html_node(text_blob).to_html())
 
-
+    text_blob = """
+1..11
+2.12.
+"""
+    #print(markdown_to_html_node(text_blob).to_html())
 main()

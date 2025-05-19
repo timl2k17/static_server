@@ -24,7 +24,12 @@ class TextNode():
     
 class BlockType(Enum):
     P = "paragraph"
-    H = "heading"
+    H1 = "heading1"
+    H2 = "heading2"
+    H3 = "heading3"
+    H4 = "heading4"
+    H5 = "heading5"
+    H6 = "heading6"
     CODE = "code"
     QUOTE = "quote"
     UL = "unordered_list"
@@ -32,7 +37,17 @@ class BlockType(Enum):
 
 def block_to_block_type(block):
     if block.startswith("# "):
-        return BlockType.H
+        return BlockType.H1
+    elif block.startswith("## "):
+        return BlockType.H2
+    elif block.startswith("### "):
+        return BlockType.H3
+    elif block.startswith("#### "):
+        return BlockType.H4
+    elif block.startswith("##### "):
+        return BlockType.H5
+    elif block.startswith("###### "):
+        return BlockType.H6
     elif block.startswith("```"):
         return BlockType.CODE
     elif block.startswith("> "):

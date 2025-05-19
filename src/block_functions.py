@@ -1,5 +1,8 @@
+import re
+
 from textnode import *
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
+from functions import *
 
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
@@ -11,10 +14,74 @@ def markdown_to_blocks(markdown):
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
-    # block_type = []
+    block_type = []
+    nodes = []
+    parent_node = ParentNode("div", [])
     for block in blocks:
-        # print(block)
         block_type = block_to_block_type(block)
-        # print(block_type)
         if block_type == BlockType.P:
-            test = HTMLNode("p", block, None)
+            text = block.replace("\n", " ")
+            children = text_to_children(text)
+            p_node = ParentNode("p", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.H1:
+            children = text_to_children(block)
+            p_node = ParentNode("h1", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.H2:
+            children = text_to_children(block)
+            p_node = ParentNode("h2", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.H3:
+            children = text_to_children(block)
+            p_node = ParentNode("h3", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.H4:
+            children = text_to_children(block)
+            p_node = ParentNode("h4", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.H5:
+            children = text_to_children(block)
+            p_node = ParentNode("h5", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.H6:
+            children = text_to_children(block)
+            p_node = ParentNode("h6", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.CODE:
+            code_contents = block.split("```")
+            code_node = LeafNode("code", code_contents[1].rstrip('\n'), None)
+            pre_node = ParentNode("pre", [code_node])
+            parent_node.children.append(pre_node)
+        elif block_type == BlockType.QUOTE:
+            children = text_to_children(block)
+            p_node = ParentNode("blockquote", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.UL:
+            blocks = block.split("\n")
+            children = []
+            for b in blocks:
+                if b.strip():  # skip empty lines
+                    content = b.lstrip('-').strip()  # remove '-' and leading/trailing spaces
+                    li_children = text_to_children(content)
+                    children.append(ParentNode("li", li_children))
+            p_node = ParentNode("ul", children)
+            parent_node.children.append(p_node)
+        elif block_type == BlockType.OL:
+            blocks = block.split("\n")
+            children = []
+            for b in blocks:
+                if b.strip():  # skip empty lines
+                    content = re.sub(r"^\d+\.\s*", "", b).strip()
+                    li_children = text_to_children(content)
+                    children.append(ParentNode("li", li_children))
+            p_node = ParentNode("ol", children)
+            parent_node.children.append(p_node)
+    return parent_node    
+
+def text_to_children(text):
+    nodes = text_to_textnodes(text)
+    children = []
+    for node in nodes:
+        children.append(text_node_to_html_node(node))
+    return children
