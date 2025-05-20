@@ -3,6 +3,7 @@ import unittest
 from textnode import *
 from inline_functions import *
 from block_functions import *
+from site_functions import *
 
 class TestFunctions(unittest.TestCase):
     def test_text(self):
@@ -224,6 +225,24 @@ the **same** even with inline stuff
         html,
         "<div><ul><li>This should be an unrdered - list</li><li>with items</li></ul></div>",
     )
+
+    def test_extract_title(self):
+        md = """
+# This is a title
+
+and some other stuff
+"""
+        title = extract_title(md)
+        self.assertEqual(title, "This is a title")
+'''
+    def test_extract_title_no_title(self):
+        md = """
+ This is a paragraph without a title
+"""
+        extract_title(md)
+        with self.assertRaises(ValueError):
+            extract_title(md)
+'''
 
 if __name__ == "__main__":
     unittest.main()
