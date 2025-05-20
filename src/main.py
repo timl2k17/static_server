@@ -1,6 +1,6 @@
 from textnode import TextNode, TextType
 from htmlnode import LeafNode, ParentNode
-from functions import *
+from inline_functions import *
 from block_functions import *
 
 def main():
@@ -50,17 +50,22 @@ This is text that _should_ remain
 the **same** even with inline stuff
 ```
 """
-    #print(markdown_to_html_node(text_blob).to_html())
+    # print(markdown_to_html_node(text_blob).to_html())
     
     text_blob = """
 - -
--- this has a dash.
+-- this has a --dash.
 """
-    #print(markdown_to_html_node(text_blob).to_html())
+    # print(markdown_to_html_node(text_blob).to_html())
 
     text_blob = """
-1..11
-2.12.
+# This is a heading
+
+## This is a subheading
+
 """
-    #print(markdown_to_html_node(text_blob).to_html())
+    # print(markdown_to_html_node(text_blob).to_html())
+
+
+
 main()

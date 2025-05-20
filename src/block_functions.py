@@ -2,7 +2,7 @@ import re
 
 from textnode import *
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from functions import *
+from inline_functions import *
 
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
@@ -25,36 +25,42 @@ def markdown_to_html_node(markdown):
             p_node = ParentNode("p", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H1:
-            children = text_to_children(block)
+            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            children = text_to_children(content)
             p_node = ParentNode("h1", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H2:
-            children = text_to_children(block)
+            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            children = text_to_children(content)
             p_node = ParentNode("h2", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H3:
-            children = text_to_children(block)
+            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            children = text_to_children(content)
             p_node = ParentNode("h3", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H4:
-            children = text_to_children(block)
+            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            children = text_to_children(content)
             p_node = ParentNode("h4", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H5:
-            children = text_to_children(block)
+            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            children = text_to_children(content)
             p_node = ParentNode("h5", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H6:
-            children = text_to_children(block)
+            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            children = text_to_children(content)
             p_node = ParentNode("h6", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.CODE:
-            code_contents = block.split("```")
-            code_node = LeafNode("code", code_contents[1].rstrip('\n'), None)
+            code_node = LeafNode("code", block.strip('```\n') + '\n', None)
             pre_node = ParentNode("pre", [code_node])
             parent_node.children.append(pre_node)
         elif block_type == BlockType.QUOTE:
-            children = text_to_children(block)
+            content = block.lstrip('>').strip()
+            children = text_to_children(content)
             p_node = ParentNode("blockquote", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.UL:

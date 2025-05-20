@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import *
-from functions import *
+from inline_functions import *
 from block_functions import *
 
 class TestFunctions(unittest.TestCase):
@@ -179,6 +179,7 @@ This is the same paragraph on a new line
         block = "1. This is an ordered list item"
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, BlockType.OL)
+    
     def test_paragraphs(self):
         md = """
 This is **bolded** paragraph
@@ -196,7 +197,33 @@ This is another paragraph with _italic_ text and `code` here
         "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
     )
 
+    def test_codeblock(self):
+        md = """
+```
+This is text that _should_ remain
+the **same** even with inline stuff
+```
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+        html,
+        "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+    )
     
+    def test_ul(self):
+        md = """
+- This should be an unrdered - list
+- with items
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+        html,
+        "<div><ul><li>This should be an unrdered - list</li><li>with items</li></ul></div>",
+    )
 
 if __name__ == "__main__":
     unittest.main()
