@@ -58,7 +58,11 @@ def markdown_to_html_node(markdown):
             pre_node = ParentNode("pre", [code_node])
             parent_node.children.append(pre_node)
         elif block_type == BlockType.QUOTE:
-            content = block.lstrip('>').strip()
+            blocks = block.split("\n")
+            content = []
+            for b in blocks:
+                content.append(b.lstrip('>').strip())
+            content = "\n".join(content)
             children = text_to_children(content)
             p_node = ParentNode("blockquote", children)
             parent_node.children.append(p_node)
