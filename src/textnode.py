@@ -9,7 +9,7 @@ class TextType(Enum):
     IMAGE = "image"
 
 class TextNode():
-    def __init__(self, text, text_type, url=None):
+    def __init__(self, text, text_type, url=None): # text = text content of node, text_type = type of text (bold, italic, etc.), url = url of link or image
         self.text = text
         self.text_type = text_type
         self.url = url
@@ -54,7 +54,7 @@ def block_to_block_type(block):
         return BlockType.QUOTE
     elif block.startswith("- "):
         return BlockType.UL
-    elif block[0].isdigit() and block[1] == ".":
+    elif block[0].isdigit() and block[1] == ".":  # replace with regex
         return BlockType.OL
     else:
         return BlockType.P
