@@ -4,6 +4,7 @@ from textnode import *
 from htmlnode import HTMLNode, LeafNode, ParentNode
 from inline_functions import *
 
+# we're assuming well formed markdown with blank lines between blocks
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
     new_blocks = []
@@ -12,44 +13,45 @@ def markdown_to_blocks(markdown):
             new_blocks.append(block.strip())
     return new_blocks
 
+# workhorse function converts a full document into s a single parent html node
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     block_type = []
-    parent_node = ParentNode("div", [])
+    parent_node = ParentNode("div", [])   # stuff everything into a div, pass empty list of children
     for block in blocks:
         block_type = block_to_block_type(block)
         if block_type == BlockType.P:
-            text = block.replace("\n", " ")
-            children = text_to_children(text)
+            text = block.replace("\n", " ")  
+            children = text_to_children(text)   # create children from text
             p_node = ParentNode("p", children)
-            parent_node.children.append(p_node)
+            parent_node.children.append(p_node) # append ParentNode as child to div
         elif block_type == BlockType.H1:
-            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            content = block.lstrip('#').strip()  
             children = text_to_children(content)
             p_node = ParentNode("h1", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H2:
-            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            content = block.lstrip('#').strip()  
             children = text_to_children(content)
             p_node = ParentNode("h2", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H3:
-            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            content = block.lstrip('#').strip()  
             children = text_to_children(content)
             p_node = ParentNode("h3", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H4:
-            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            content = block.lstrip('#').strip()  
             children = text_to_children(content)
             p_node = ParentNode("h4", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H5:
-            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            content = block.lstrip('#').strip()  
             children = text_to_children(content)
             p_node = ParentNode("h5", children)
             parent_node.children.append(p_node)
         elif block_type == BlockType.H6:
-            content = block.lstrip('#').strip()  # remove '-' and leading/trailing spaces
+            content = block.lstrip('#').strip()  
             children = text_to_children(content)
             p_node = ParentNode("h6", children)
             parent_node.children.append(p_node)
@@ -71,7 +73,7 @@ def markdown_to_html_node(markdown):
             children = []
             for b in blocks:
                 if b.strip():  # skip empty lines
-                    content = b.lstrip('-').strip()  # remove '-' and leading/trailing spaces
+                    content = b.lstrip('-').strip()  
                     li_children = text_to_children(content)
                     children.append(ParentNode("li", li_children))
             p_node = ParentNode("ul", children)

@@ -9,19 +9,15 @@ def copy_contents(src, dest):
     file_list = (os.listdir(src))
     for entry in file_list:
         path = os.path.join(src, entry)
-        # print(os.path.isfile(path))
         if os.path.isfile(path):
            shutil.copy(path, dest)
         else:
             copy_contents(path, os.path.join(dest, entry))
 
 def extract_title(markdown):
-    # print("Extracting title from markdown")
     lines = markdown.split("\n")
     for line in lines:
-        # print(line)
-        if line.startswith("# "):
-            # print("Header found")
+        if line.startswith("# "):  # find title
             return line[2:]
     raise ValueError("No title found in markdown")
 
